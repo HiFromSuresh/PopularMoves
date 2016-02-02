@@ -1,6 +1,7 @@
 package com.sureshssk2006.gmail.popularmoves;
 
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,20 +33,22 @@ public class MovieListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+        String sortByVAlue = "popularity.desc";//To be brought from the user prefs from settings
         FetchMovieListTask fetchMovieListTask = new FetchMovieListTask();
-        fetchMovieListTask.execute();
+        fetchMovieListTask.execute(sortByVAlue);
 
         return inflater.inflate(R.layout.fragment_blank, container, false);
 
     }
 
-    public class FetchMovieListTask extends AsyncTask<Void, Void, String> {
+    public class FetchMovieListTask extends AsyncTask<String, Void, String> {
 
 
         private final String LOG_TAG = FetchMovieListTask.class.getSimpleName();
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -55,13 +58,23 @@ public class MovieListFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String movielistJsonStr = null;
 
-            try {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                URL url = new URL("https://api.themoviedb.org/3/movie/550?api_key=");//Have to add api key mannually
+            String apiKeyVAlue = "";//Have to add api key mannually
 
-                // Create the request to OpenWeatherMap, and open the connection
+            try {
+                // Construct the URL for the TMDB query
+                // Possible parameters are avaiable at TMDB API page
+                final String BASE_URL = "https://api.themoviedb.org/3/discover/movie?";
+                final String SORT_PARAM = "sort_by";
+                final String API_KEY = "api_key";
+
+                Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                        .appendQueryParameter(SORT_PARAM, params[0])
+                        .appendQueryParameter(API_KEY, apiKeyVAlue)
+                        .build();
+                URL url = new URL(builtUri.toString());
+                //URL url = new URL("https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=");
+
+                // Create the request to TMDB, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
