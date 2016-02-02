@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,6 +130,34 @@ public class MovieListFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.v(LOG_TAG, s);
+            try {
+                getMovieDataFromJson(s);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void getMovieDataFromJson(String s) throws JSONException {
+
+            // These are the names of the JSON objects that need to be extracted.
+            final String TMDB_RESULTS = "results";
+            final String TMDB_MOVIE_TITLE = "original_title";
+            final String TMDB_POSTERPATH = "poster_path";
+
+            JSONObject movielistJson = new JSONObject(s);
+            JSONArray resultsArray = movielistJson.getJSONArray(TMDB_RESULTS);
+
+            for (int i = 0; i < resultsArray.length(); i++){
+                String movieName;
+                String posterPath;
+
+                JSONObject movieObject = resultsArray.getJSONObject(i);
+                movieName = movieObject.getString(TMDB_MOVIE_TITLE);
+                posterPath = movieObject.getString(TMDB_POSTERPATH);
+
+                TmdbMovie tmdbMovie = new TmdbMovie(movieName, posterPath);
+                Log.v(LOG_TAG, movieName);
+            }
         }
     }
 
