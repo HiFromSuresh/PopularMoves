@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -50,6 +52,7 @@ public class MovieListFragment extends Fragment {
 
 
         private final String LOG_TAG = FetchMovieListTask.class.getSimpleName();
+        List<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
 
         @Override
         protected String doInBackground(String... params) {
@@ -105,6 +108,14 @@ public class MovieListFragment extends Fragment {
                     return null;
                 }
                 movielistJsonStr = buffer.toString();
+
+                Log.v(LOG_TAG, movielistJsonStr);
+                try {
+                    getMovieDataFromJson(movielistJsonStr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
@@ -123,18 +134,13 @@ public class MovieListFragment extends Fragment {
                 }
             }
 
-            return movielistJsonStr;
+            return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.v(LOG_TAG, s);
-            try {
-                getMovieDataFromJson(s);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
         }
 
         private void getMovieDataFromJson(String s) throws JSONException {
@@ -156,6 +162,7 @@ public class MovieListFragment extends Fragment {
                 posterPath = movieObject.getString(TMDB_POSTERPATH);
 
                 TmdbMovie tmdbMovie = new TmdbMovie(movieName, posterPath);
+                movieArray.add(tmdbMovie);
                 Log.v(LOG_TAG, movieName);
             }
         }
