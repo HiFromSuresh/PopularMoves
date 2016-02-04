@@ -12,4 +12,9 @@ public class TmdbMovie {
         this.posterPath = posterPath;
         this.movieName = movieName;
     }
+
+    public String posterPath() {
+        return "http://image.tmdb.org/t/p/w185" + posterPath;
+
+    }
 }

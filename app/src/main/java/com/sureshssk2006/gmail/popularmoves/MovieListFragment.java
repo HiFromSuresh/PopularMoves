@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,9 @@ import java.util.List;
  */
 public class MovieListFragment extends Fragment {
 
+    private MovieAdapter movieAdapter;
+    List<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
+    GridView gridView;
 
     public MovieListFragment() {
         // Required empty public constructor
@@ -39,12 +43,15 @@ public class MovieListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         String sortByVAlue = "popularity.desc";//To be brought from the user prefs from settings
         FetchMovieListTask fetchMovieListTask = new FetchMovieListTask();
         fetchMovieListTask.execute(sortByVAlue);
 
-        return inflater.inflate(R.layout.fragment_blank, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
+
+        gridView = (GridView)rootView.findViewById(R.id.gridview);
+
+        return rootView;
 
     }
 
@@ -141,6 +148,8 @@ public class MovieListFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
+            movieAdapter = new MovieAdapter(getContext(), (ArrayList<TmdbMovie>) movieArray);
+            gridView.setAdapter(movieAdapter);
         }
 
         private void getMovieDataFromJson(String s) throws JSONException {
