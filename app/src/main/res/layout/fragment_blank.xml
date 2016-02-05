@@ -5,16 +5,14 @@
     tools:context=".MovieListFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <GridView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:numColumns="auto_fit"
             android:id="@+id/gridview">
 
         </GridView>
-    </ScrollView>
 
 </FrameLayout>

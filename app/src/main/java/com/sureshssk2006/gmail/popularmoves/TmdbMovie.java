@@ -8,13 +8,13 @@ public class TmdbMovie {
     String movieName;
     String posterPath;
 
-    public TmdbMovie(String posterPath, String movieName) {
+    public TmdbMovie(String movieName, String posterPath) {
         this.posterPath = posterPath;
         this.movieName = movieName;
     }
 
     public String posterPath() {
-        return "http://image.tmdb.org/t/p/w185" + posterPath;
+        return "http://image.tmdb.org/t/p/w500" + posterPath;
 
     }
 }
