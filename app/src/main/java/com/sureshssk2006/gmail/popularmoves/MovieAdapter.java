@@ -56,7 +56,7 @@ public class MovieAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        Log.v(LOG_TAG, String.valueOf(position));
+        Log.v(LOG_TAG, movieArrayList.get(position).posterPath());
         if(convertView==null){
             LayoutInflater inflater = ((MainActivity)mContext).getLayoutInflater();
             convertView = inflater.inflate(R.layout.list_item_movie, parent, false);
