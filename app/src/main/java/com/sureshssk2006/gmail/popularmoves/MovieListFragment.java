@@ -1,6 +1,8 @@
 package com.sureshssk2006.gmail.popularmoves;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,6 +38,9 @@ public class MovieListFragment extends Fragment {
     private MovieAdapter movieAdapter;
     List<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
     GridView gridView;
+    FetchMovieListTask fetchMovieListTask;
+    SharedPreferences sharedPreferences;
+    String sortByValue;
 
     public MovieListFragment() {
         // Required empty public constructor
@@ -59,7 +64,25 @@ public class MovieListFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_sort_by) {
+        if (id == R.id.popularity) {
+            sharedPreferences = getActivity().getSharedPreferences("PrefData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("SORT_VALUE", getResources().getString(R.string.popularity_desc));
+            editor.commit();
+            sortByValue = sharedPreferences
+                    .getString("SORT_VALUE", getResources().getString(R.string.popularity_desc));
+            fetchMovieListTask = new FetchMovieListTask();
+            fetchMovieListTask.execute(sortByValue);
+        }
+        if (id == R.id.rating){
+            sharedPreferences = getActivity().getSharedPreferences("PrefData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("SORT_VALUE", getResources().getString(R.string.rating_desc));
+            editor.commit();
+            sortByValue = sharedPreferences
+                    .getString("SORT_VALUE", getResources().getString(R.string.rating_desc));
+            fetchMovieListTask = new FetchMovieListTask();
+            fetchMovieListTask.execute(sortByValue);
         }
 
         return super.onOptionsItemSelected(item);
@@ -70,9 +93,12 @@ public class MovieListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String sortByVAlue = "popularity.desc";//To be brought from the user prefs from settings
-        FetchMovieListTask fetchMovieListTask = new FetchMovieListTask();
-        fetchMovieListTask.execute(sortByVAlue);
+        sharedPreferences = getActivity().getSharedPreferences("PrefData", Context.MODE_PRIVATE);
+        sortByValue = sharedPreferences
+                .getString("SORT_VALUE", getResources().getString(R.string.popularity_desc));
+
+        fetchMovieListTask = new FetchMovieListTask();
+        fetchMovieListTask.execute(sortByValue);
 
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
