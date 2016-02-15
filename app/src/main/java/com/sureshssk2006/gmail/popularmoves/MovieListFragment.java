@@ -65,27 +65,32 @@ public class MovieListFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.popularity) {
-            sharedPreferences = getActivity().getSharedPreferences("PrefData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("SORT_VALUE", getResources().getString(R.string.popularity_desc));
-            editor.commit();
-            sortByValue = sharedPreferences
-                    .getString("SORT_VALUE", getResources().getString(R.string.popularity_desc));
-            fetchMovieListTask = new FetchMovieListTask();
-            fetchMovieListTask.execute(sortByValue);
+            String sortValue = getResources().getString(R.string.popularity_desc);
+            if (sharedPreferences.getString("SORT_VALUE", sortValue).equals(sortValue)){
+                //do nothing
+            }else{
+                ReloadPosters(sortValue);
+            }
         }
         if (id == R.id.rating){
-            sharedPreferences = getActivity().getSharedPreferences("PrefData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("SORT_VALUE", getResources().getString(R.string.rating_desc));
-            editor.commit();
-            sortByValue = sharedPreferences
-                    .getString("SORT_VALUE", getResources().getString(R.string.rating_desc));
-            fetchMovieListTask = new FetchMovieListTask();
-            fetchMovieListTask.execute(sortByValue);
+            String sortValue = getResources().getString(R.string.rating_desc);
+            if (sharedPreferences.getString("SORT_VALUE", sortValue).equals(sortValue)){
+                //do nothing
+            }else{
+                ReloadPosters(sortValue);
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void ReloadPosters(String sortValue) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("SORT_VALUE", sortValue);
+        editor.commit();
+        fetchMovieListTask = new FetchMovieListTask();
+        fetchMovieListTask.execute(sortValue);
     }
 
 
