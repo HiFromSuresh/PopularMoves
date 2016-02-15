@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_sort_by"
+
+    <item
+        android:id="@+id/action_sort_by"
         android:title="@string/action_sort_by"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_sort_black_24dp">
+
+        <menu>
+            <item
+                android:id="@+id/popularity"
+                android:title="@string/popularity"/>
+            <item
+                android:id="@+id/rating"
+                android:title="@string/rating"/>
+        </menu>
+
+        </item>
+
 </menu>

@@ -60,8 +60,8 @@ public class MovieListFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_sort_by) {
-            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
