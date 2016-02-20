@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -108,6 +109,16 @@ public class MovieListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
         gridView = (GridView)rootView.findViewById(R.id.gridview);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new Detailsfragment())
+                        .addToBackStack(null).commit();
+            }
+        });
 
         return rootView;
 
