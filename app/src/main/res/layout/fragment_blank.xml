@@ -13,10 +13,7 @@
             android:numColumns="auto_fit"
             android:id="@+id/gridview"
             android:gravity="center"
-            android:stretchMode="columnWidth"
-            android:columnWidth="90dp"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp">
+            android:stretchMode="columnWidth">
 
         </GridView>
 
