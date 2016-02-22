@@ -21,13 +21,17 @@ import butterknife.ButterKnife;
 public class MovieAdapter extends BaseAdapter{
 
     private Context mContext;
-    private ArrayList<TmdbMovie> movieArrayList;
+    private static ArrayList<TmdbMovie> movieArrayList;
     private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
 
     public MovieAdapter(Context context, ArrayList<TmdbMovie> movieArray) {
         mContext = context;
         movieArrayList = movieArray;
         notifyDataSetChanged();
+    }
+
+    static Object getMovieObject(int position){
+        return movieArrayList.get(position);
     }
 
     //View holder class to make scrolling smooth
