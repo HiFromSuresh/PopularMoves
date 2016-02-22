@@ -27,4 +27,8 @@ public class TmdbMovie {
         //return "http://image.tmdb.org/t/p/w500" + posterPath;
 
     }
+
+    public String getMovieName() {
+        return movieName;
+    }
 }

@@ -97,7 +97,7 @@ public class MovieListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
 
         sharedPreferences = getActivity().getSharedPreferences("PrefData", Context.MODE_PRIVATE);
         sortByValue = sharedPreferences
@@ -113,10 +113,16 @@ public class MovieListFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Detailsfragment detailsfragment = new Detailsfragment();
+                Bundle args = new Bundle();
+                args.putInt("POSITION", position);
+                detailsfragment.setArguments(args);
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.container, new Detailsfragment())
+                        .replace(R.id.container, detailsfragment)
                         .addToBackStack(null).commit();
+
             }
         });
 
