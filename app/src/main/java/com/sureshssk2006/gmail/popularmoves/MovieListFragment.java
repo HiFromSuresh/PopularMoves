@@ -252,7 +252,6 @@ public class MovieListFragment extends Fragment {
 
                 TmdbMovie tmdbMovie = new TmdbMovie(movieName, posterPath, overview, releaseDate, vote_average);
                 movieArray.add(tmdbMovie);
-                Log.v(LOG_TAG, movieName);
             }
         }
     }

@@ -31,7 +31,7 @@ public class TmdbMovie {
                 .appendEncodedPath(posterPath)
                 .build();
         return builtUri.toString();
-        //return "http://image.tmdb.org/t/p/w500" + posterPath;
+        //return "http://image.tmdb.org/t/p/w185" + posterPath;
 
     }
 
