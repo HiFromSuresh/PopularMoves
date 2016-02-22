@@ -67,17 +67,18 @@ public class MovieListFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.popularity) {
             String sortValue = getResources().getString(R.string.popularity_desc);
-            if (sharedPreferences.getString("SORT_VALUE", sortValue).equals(sortValue)){
+            if (sharedPreferences.getString("SORT_VALUE", "vote_count.desc").equals(sortValue)) {
                 //do nothing
-            }else{
+            } else {
                 ReloadPosters(sortValue);
+
             }
         }
-        if (id == R.id.rating){
+        if (id == R.id.rating) {
             String sortValue = getResources().getString(R.string.rating_desc);
-            if (sharedPreferences.getString("SORT_VALUE", sortValue).equals(sortValue)){
+            if (sharedPreferences.getString("SORT_VALUE", "popularity.desc").equals(sortValue)) {
                 //do nothing
-            }else{
+            } else {
                 ReloadPosters(sortValue);
             }
 
@@ -108,7 +109,7 @@ public class MovieListFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
-        gridView = (GridView)rootView.findViewById(R.id.gridview);
+        gridView = (GridView) rootView.findViewById(R.id.gridview);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -203,7 +204,7 @@ public class MovieListFragment extends Fragment {
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
                 return null;
-            } finally{
+            } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
@@ -240,7 +241,7 @@ public class MovieListFragment extends Fragment {
             JSONObject movielistJson = new JSONObject(s);
             JSONArray resultsArray = movielistJson.getJSONArray(TMDB_RESULTS);
 
-            for (int i = 0; i < resultsArray.length(); i++){
+            for (int i = 0; i < resultsArray.length(); i++) {
 
                 JSONObject movieObject = resultsArray.getJSONObject(i);
                 String movieName = movieObject.getString(TMDB_MOVIE_TITLE);

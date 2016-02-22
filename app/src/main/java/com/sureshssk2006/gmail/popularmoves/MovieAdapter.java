@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2/4/2016.
  */
-public class MovieAdapter extends BaseAdapter{
+public class MovieAdapter extends BaseAdapter {
 
     private Context mContext;
     private static ArrayList<TmdbMovie> movieArrayList;
@@ -30,14 +30,16 @@ public class MovieAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
-    static Object getMovieObject(int position){
+    static Object getMovieObject(int position) {
         return movieArrayList.get(position);
     }
 
     //View holder class to make scrolling smooth
-    static class ViewHolder{
-        @Bind(R.id.image_view)ImageView imageView;
-        public ViewHolder(View view){
+    static class ViewHolder {
+        @Bind(R.id.image_view)
+        ImageView imageView;
+
+        public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
@@ -61,13 +63,13 @@ public class MovieAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         Log.v(LOG_TAG, movieArrayList.get(position).posterPath());
-        if(convertView==null){
-            LayoutInflater inflater = ((MainActivity)mContext).getLayoutInflater();
+        if (convertView == null) {
+            LayoutInflater inflater = ((MainActivity) mContext).getLayoutInflater();
             convertView = inflater.inflate(R.layout.list_item_movie, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }else{
-            holder = (ViewHolder)convertView.getTag();
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
         Picasso.with(mContext).load(movieArrayList.get(position).posterPath()).into(holder.imageView);
         return convertView;

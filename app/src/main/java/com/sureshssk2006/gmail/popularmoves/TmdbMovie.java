@@ -6,7 +6,7 @@ import android.net.Uri;
  * Created by Administrator on 2/2/2016.
  */
 public class TmdbMovie {
-    
+
     String movieName;
     String posterPath;
     String overView;
@@ -56,7 +56,7 @@ public class TmdbMovie {
     public String getReleaseDate() {
         //To get the first four characters of the release date which is the year
         String releaseDateYear = releaseDate.trim();
-        releaseDateYear = releaseDateYear.substring(0,4);
+        releaseDateYear = releaseDateYear.substring(0, 4);
         return releaseDateYear;
     }
 

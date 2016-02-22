@@ -36,8 +36,8 @@ public class Detailsfragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
         //Typecasting
-        mTitleTextView = (TextView)rootView.findViewById(R.id.details_original_title);
-        mImageView = (ImageView)rootView.findViewById(R.id.details_image_poster);
+        mTitleTextView = (TextView) rootView.findViewById(R.id.details_original_title);
+        mImageView = (ImageView) rootView.findViewById(R.id.details_image_poster);
         mOverviewTextView = (TextView) rootView.findViewById(R.id.details_plot_synopsis);
         mRatingTextView = (TextView) rootView.findViewById(R.id.details_rating);
         mReleasedateTextView = (TextView) rootView.findViewById(R.id.details_release_date);
