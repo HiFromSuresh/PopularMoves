@@ -54,10 +54,14 @@ public class TmdbMovie {
     }
 
     public String getReleaseDate() {
-        return releaseDate;
+        //To get the first four characters of the release date which is the year
+        String releaseDateYear = releaseDate.trim();
+        releaseDateYear = releaseDateYear.substring(0,4);
+        return releaseDateYear;
     }
 
     public String getVoteAverage() {
-        return voteAverage;
+        String voteAverageWithTotal = voteAverage + "/10";
+        return voteAverageWithTotal;
     }
 }
