@@ -233,19 +233,23 @@ public class MovieListFragment extends Fragment {
             final String TMDB_RESULTS = "results";
             final String TMDB_MOVIE_TITLE = "original_title";
             final String TMDB_POSTERPATH = "poster_path";
+            final String TMDB_OVERVIEW = "overview";
+            final String TMDB_RELEASE_DATE = "release_date";
+            final String TMDB_VOTE_AVERAGE = "vote_average";
 
             JSONObject movielistJson = new JSONObject(s);
             JSONArray resultsArray = movielistJson.getJSONArray(TMDB_RESULTS);
 
             for (int i = 0; i < resultsArray.length(); i++){
-                String movieName;
-                String posterPath;
 
                 JSONObject movieObject = resultsArray.getJSONObject(i);
-                movieName = movieObject.getString(TMDB_MOVIE_TITLE);
-                posterPath = movieObject.getString(TMDB_POSTERPATH);
+                String movieName = movieObject.getString(TMDB_MOVIE_TITLE);
+                String posterPath = movieObject.getString(TMDB_POSTERPATH);
+                String overview = movieObject.getString(TMDB_OVERVIEW);
+                String releaseDate = movieObject.getString(TMDB_RELEASE_DATE);
+                String vote_average = movieObject.getString(TMDB_VOTE_AVERAGE);
 
-                TmdbMovie tmdbMovie = new TmdbMovie(movieName, posterPath);
+                TmdbMovie tmdbMovie = new TmdbMovie(movieName, posterPath, overview, releaseDate, vote_average);
                 movieArray.add(tmdbMovie);
                 Log.v(LOG_TAG, movieName);
             }

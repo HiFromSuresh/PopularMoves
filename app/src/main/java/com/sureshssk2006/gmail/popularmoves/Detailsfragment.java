@@ -50,6 +50,9 @@ public class Detailsfragment extends Fragment {
 
         mTitleTextView.setText(tmdbMovie.getMovieName());
         Picasso.with(getContext()).load(tmdbMovie.largePosterPath()).into(mImageView);
+        mOverviewTextView.setText(tmdbMovie.getOverView());
+        mRatingTextView.setText(tmdbMovie.getVoteAverage());
+        mReleasedateTextView.setText(tmdbMovie.getReleaseDate());
 
         return rootView;
     }
