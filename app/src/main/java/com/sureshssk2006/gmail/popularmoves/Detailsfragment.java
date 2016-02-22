@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +49,7 @@ public class Detailsfragment extends Fragment {
         TmdbMovie tmdbMovie = (TmdbMovie) MovieAdapter.getMovieObject(position);
 
         mTitleTextView.setText(tmdbMovie.getMovieName());
+        Picasso.with(getContext()).load(tmdbMovie.largePosterPath()).into(mImageView);
 
         return rootView;
     }

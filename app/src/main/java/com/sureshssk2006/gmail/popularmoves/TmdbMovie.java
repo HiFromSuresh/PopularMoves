@@ -11,6 +11,7 @@ public class TmdbMovie {
     String posterPath;
     final String BASE_URL = "http://image.tmdb.org/t/p/";
     final String POSTER_SIZE = "w185";
+    final String LARGE_POSTER_SIZE = "w300";
 
     public TmdbMovie(String movieName, String posterPath) {
         this.posterPath = posterPath;
@@ -25,6 +26,16 @@ public class TmdbMovie {
                 .build();
         return builtUri.toString();
         //return "http://image.tmdb.org/t/p/w500" + posterPath;
+
+    }
+
+    public String largePosterPath() {
+
+        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(LARGE_POSTER_SIZE)
+                .appendEncodedPath(posterPath)
+                .build();
+        return builtUri.toString();
 
     }
 
