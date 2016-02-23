@@ -21,8 +21,8 @@ import butterknife.ButterKnife;
 public class MovieAdapter extends BaseAdapter {
 
     private Context mContext;
-    private static ArrayList<TmdbMovie> movieArrayList;
-    private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
+    private ArrayList<TmdbMovie> movieArrayList;
+    private final String LOG_TAG = MovieAdapter.class.getSimpleName();
 
     public MovieAdapter(Context context, ArrayList<TmdbMovie> movieArray) {
         mContext = context;
@@ -30,7 +30,7 @@ public class MovieAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    static Object getMovieObject(int position) {
+    public Object getMovieObject(int position) {
         return movieArrayList.get(position);
     }
 

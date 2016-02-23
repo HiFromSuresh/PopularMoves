@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
  */
 public class Detailsfragment extends Fragment {
 
+    private final String OBJECT_KEY = "object_key";
     //member variables
     private TextView mTitleTextView;
     private ImageView mImageView;
@@ -44,9 +45,8 @@ public class Detailsfragment extends Fragment {
 
         //get Data from bundle
         Bundle bundle = this.getArguments();
-        int position = bundle.getInt("POSITION");
 
-        TmdbMovie tmdbMovie = (TmdbMovie) MovieAdapter.getMovieObject(position);
+        TmdbMovie tmdbMovie = bundle.getParcelable(OBJECT_KEY);
 
         mTitleTextView.setText(tmdbMovie.getMovieName());
         Picasso.with(getContext()).load(tmdbMovie.posterPath()).into(mImageView);

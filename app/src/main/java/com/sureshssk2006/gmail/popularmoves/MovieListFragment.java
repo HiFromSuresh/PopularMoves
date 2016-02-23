@@ -37,6 +37,7 @@ import java.util.ArrayList;
 public class MovieListFragment extends Fragment {
 
     private static final String STATE_MOVIES = "state_movies";
+    private static final String OBJECT_KEY = "object_key";
     private MovieAdapter movieAdapter;
     ArrayList<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
     GridView gridView;
@@ -115,7 +116,8 @@ public class MovieListFragment extends Fragment {
 
                 Detailsfragment detailsfragment = new Detailsfragment();
                 Bundle args = new Bundle();
-                args.putInt("POSITION", position);
+                TmdbMovie tmdbObject = (TmdbMovie) movieAdapter.getMovieObject(position);
+                args.putParcelable(OBJECT_KEY, tmdbObject);
                 detailsfragment.setArguments(args);
                 getFragmentManager()
                         .beginTransaction()
