@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +29,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -36,8 +36,9 @@ import java.util.List;
  */
 public class MovieListFragment extends Fragment {
 
+    private static final String STATE_MOVIES = "state_movies";
     private MovieAdapter movieAdapter;
-    List<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
+    ArrayList<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
     GridView gridView;
     FetchMovieListTask fetchMovieListTask;
     SharedPreferences sharedPreferences;
@@ -104,9 +105,6 @@ public class MovieListFragment extends Fragment {
         sortByValue = sharedPreferences
                 .getString("SORT_VALUE", getResources().getString(R.string.popularity_desc));
 
-        fetchMovieListTask = new FetchMovieListTask();
-        fetchMovieListTask.execute(sortByValue);
-
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.gridview);
@@ -127,18 +125,35 @@ public class MovieListFragment extends Fragment {
             }
         });
 
+        if(savedInstanceState == null) {
+            fetchMovieListTask = new FetchMovieListTask();
+            fetchMovieListTask.execute(sortByValue);
+        }else{
+            movieArray = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+            movieAdapter = new MovieAdapter(getContext(), movieArray);
+            gridView.setAdapter(movieAdapter);
+        }
         return rootView;
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieArray);
+    }
+
 
     public class FetchMovieListTask extends AsyncTask<String, Void, String> {
 
 
         private final String LOG_TAG = FetchMovieListTask.class.getSimpleName();
-        List<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
 
         @Override
         protected String doInBackground(String... params) {
+
+            //To empty the arraylist if it is already loaded
+            movieArray.clear();
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
