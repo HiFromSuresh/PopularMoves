@@ -1,6 +1,7 @@
 package com.sureshssk2006.gmail.popularmoves;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,11 +22,15 @@ import butterknife.ButterKnife;
  */
 public class MovieAdapter extends BaseAdapter {
 
+    final String BASE_URL = "http://image.tmdb.org/t/p/";
+    final String POSTER_SIZE = "w185";
+
+
     private Context mContext;
-    private ArrayList<TmdbMovie> movieArrayList;
+    private List<TMDBmovieList.TmdbMovee> movieArrayList;
     private final String LOG_TAG = MovieAdapter.class.getSimpleName();
 
-    public MovieAdapter(Context context, ArrayList<TmdbMovie> movieArray) {
+    public MovieAdapter(Context context, ArrayList<TMDBmovieList.TmdbMovee> movieArray) {
         mContext = context;
         movieArrayList = movieArray;
         notifyDataSetChanged();
@@ -51,7 +57,7 @@ public class MovieAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return movieArrayList.get(position).posterPath;
+        return movieArrayList.get(position).poster_path;
     }
 
     @Override
@@ -62,7 +68,7 @@ public class MovieAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        Log.v(LOG_TAG, movieArrayList.get(position).posterPath());
+        Log.v(LOG_TAG, posterPath(position));
         if (convertView == null) {
             LayoutInflater inflater = ((MainActivity) mContext).getLayoutInflater();
             convertView = inflater.inflate(R.layout.list_item_movie, parent, false);
@@ -71,7 +77,21 @@ public class MovieAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Picasso.with(mContext).load(movieArrayList.get(position).posterPath()).into(holder.imageView);
+        Picasso.with(mContext).load(posterPath(position)).into(holder.imageView);
         return convertView;
+    }
+
+    private String posterPath(int position) {
+        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(POSTER_SIZE)
+                .appendEncodedPath((String) getItem(position))
+                .build();
+        return builtUri.toString();
+
+    }
+
+    public void swapList(List<TMDBmovieList.TmdbMovee> items){
+        this.movieArrayList = items;
+        notifyDataSetChanged();
     }
 }

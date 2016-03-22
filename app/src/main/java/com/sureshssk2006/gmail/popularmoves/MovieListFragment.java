@@ -3,10 +3,7 @@ package com.sureshssk2006.gmail.popularmoves;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,18 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 /**
@@ -39,11 +36,18 @@ public class MovieListFragment extends Fragment {
     private static final String STATE_MOVIES = "state_movies";
     private static final String OBJECT_KEY = "object_key";
     private MovieAdapter movieAdapter;
-    ArrayList<TmdbMovie> movieArray = new ArrayList<TmdbMovie>();
+    ArrayList<TMDBmovieList.TmdbMovee> movieArray = new ArrayList<TMDBmovieList.TmdbMovee>();
     GridView gridView;
-    FetchMovieListTask fetchMovieListTask;
+    //FetchMovieListTask fetchMovieListTask;
     SharedPreferences sharedPreferences;
     String sortByValue;
+
+    final String BASE_URL = "https://api.themoviedb.org/";
+    String apiKeyVAlue;
+    Retrofit retrofit;
+    private Call<TMDBmovieList> call;
+    private TMDBmovieList movieList;
+    private List<TMDBmovieList.TmdbMovee> items;
 
     public MovieListFragment() {
         // Required empty public constructor
@@ -93,8 +97,9 @@ public class MovieListFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("SORT_VALUE", sortValue);
         editor.commit();
-        fetchMovieListTask = new FetchMovieListTask();
-        fetchMovieListTask.execute(sortValue);
+        fetchPosters(sortValue);
+        //fetchMovieListTask = new FetchMovieListTask();
+        //fetchMovieListTask.execute(sortValue);
     }
 
 
@@ -109,7 +114,6 @@ public class MovieListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.gridview);
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -127,26 +131,66 @@ public class MovieListFragment extends Fragment {
             }
         });
 
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiKeyVAlue = BuildConfig.TMDB_API_KEY;
+
         if(savedInstanceState == null) {
-            fetchMovieListTask = new FetchMovieListTask();
-            fetchMovieListTask.execute(sortByValue);
+            fetchPosters(sortByValue);
+            //fetchMovieListTask = new FetchMovieListTask();
+            //fetchMovieListTask.execute(sortByValue);
         }else{
-            movieArray = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
-            movieAdapter = new MovieAdapter(getContext(), movieArray);
-            gridView.setAdapter(movieAdapter);
+            fetchPosters(sortByValue);
+            //movieArray = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+            //movieAdapter = new MovieAdapter(getContext(), movieArray);
+            //gridView.setAdapter(movieAdapter);
         }
         return rootView;
+
+    }
+
+    private void fetchPosters(String sortValue) {
+        movieAdapter = new MovieAdapter(getContext(), (ArrayList<TMDBmovieList.TmdbMovee>) movieArray);
+        gridView.setAdapter(movieAdapter);
+        TMDBService.TMDBapi tmdBapi = retrofit.create(TMDBService.TMDBapi.class);
+        call = tmdBapi.getMovies(sortValue, apiKeyVAlue);
+        call.enqueue(new Callback<TMDBmovieList>() {
+            @Override
+            public void onResponse(Call<TMDBmovieList> call, Response<TMDBmovieList> response) {
+                try {
+
+                    Log.d("TAG", "onResponse: " + response.body().toString());
+                    movieList = response.body();
+                    items = movieList.getResults();
+                    movieAdapter.swapList(items);
+                }catch (NullPointerException e){
+                    Toast.makeText(getContext(), "Null", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TMDBmovieList> call, Throwable t) {
+                Toast.makeText(getContext(), "Onfailure called", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieArray);
+        //outState.putParcelableArrayList(STATE_MOVIES, (ArrayList<? extends Parcelable>) movieArray);
     }
 
 
-    public class FetchMovieListTask extends AsyncTask<String, Void, String> {
+/*    public class FetchMovieListTask extends AsyncTask<String, Void, String> {
 
 
         private final String LOG_TAG = FetchMovieListTask.class.getSimpleName();
@@ -271,6 +315,6 @@ public class MovieListFragment extends Fragment {
                 movieArray.add(tmdbMovie);
             }
         }
-    }
+    }*/
 
 }
